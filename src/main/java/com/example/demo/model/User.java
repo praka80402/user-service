@@ -1,17 +1,28 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@NamedStoredProcedureQuery(
+        name = "User.getUserByEmail",
+        procedureName = "get_user_by_email",
+        resultClasses = User.class,
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "email_input", type = String.class)
+        }
+)
 public class User {
 
     @Id
     private Long id;
     @Column
+    @NotBlank(message = "Name cannot be blank")
     private String name;
     @Column
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
     private String email;
 
     public Long getId() {
